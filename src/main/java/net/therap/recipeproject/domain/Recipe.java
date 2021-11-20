@@ -10,6 +10,7 @@ import java.util.Set;
  * @since 11/18/21
  */
 @Entity
+@Table(name = "recipe")
 public class Recipe implements Serializable {
 
     private static final long serialVersionUID=1L;
@@ -30,9 +31,12 @@ public class Recipe implements Serializable {
 
     private String url;
 
+    @Lob
     private String directions;
 
-//    private Difficulty difficulty;
+    @Enumerated(value=EnumType.STRING)
+    private Difficulty difficulty;
+
     @Lob
     private byte[] image;
 
@@ -42,8 +46,17 @@ public class Recipe implements Serializable {
     @OneToOne(cascade = CascadeType.ALL)
     private Notes notes;
 
+    @ManyToMany
+    @JoinTable(
+            name = "recipe_category",
+            joinColumns = @JoinColumn(name = "recipe_id"),
+            inverseJoinColumns = @JoinColumn(name = "category_id")
+    )
+    private Set<Category> categories;
+
     public Recipe(){
         this.ingredients=new HashSet<>();
+        this.categories=new HashSet<>();
     }
 
     public Long getId() {
@@ -124,5 +137,29 @@ public class Recipe implements Serializable {
 
     public void setNotes(Notes notes) {
         this.notes = notes;
+    }
+
+    public Difficulty getDifficulty() {
+        return difficulty;
+    }
+
+    public void setDifficulty(Difficulty difficulty) {
+        this.difficulty = difficulty;
+    }
+
+    public Set<Category> getCategories() {
+        return categories;
+    }
+
+    public void setCategories(Set<Category> categories) {
+        this.categories = categories;
+    }
+
+    public Set<Ingredient> getIngredients() {
+        return ingredients;
+    }
+
+    public void setIngredients(Set<Ingredient> ingredients) {
+        this.ingredients = ingredients;
     }
 }

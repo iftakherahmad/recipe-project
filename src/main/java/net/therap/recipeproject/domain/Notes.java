@@ -8,6 +8,7 @@ import java.io.Serializable;
  * @since 11/18/21
  */
 @Entity
+@Table(name = "notes")
 public class Notes implements Serializable {
 
     private static final long serialVersionUID=1L;
